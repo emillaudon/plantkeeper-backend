@@ -31,13 +31,14 @@ postApp.get('/:id', async (req, res) => {
 postApp.post('/new/:id', async (req, res) => {
     const userId = req.params.id;
     const title = req.body.title;
+    const imageUrl = req.body.image;
 
     const data = {
         title: title,
-        f: title
+        imageUrl: imageUrl
     }
 
-    await db.collection('users').doc(userId).collection('posts').add(data);
+    await db.collection('users').doc(userId).collection('plants').add(data);
 
     res.status(201).send();
 });
@@ -46,7 +47,7 @@ postApp.put('/:id', async (req, res) => {
     const id = req.params.id;
     const body = req.params.body;
 
-    await db.collection('users').doc(userId).collection('posts').doc(id).update(body);
+    await db.collection('users').doc(userId).collection('plants').doc(id).update(body);
 
     res.status(200).send();
 });
@@ -55,7 +56,7 @@ postApp.delete('/:id', async (req, res) => {
     const userId = req.params.id;
     const docId = JSON.parse(req.body.postId);
 
-    await db.collection('users').doc(userId).collection('posts').doc(docId).delete();
+    await db.collection('users').doc(userId).collection('plants').doc(docId).delete();
 
     res.status(200).send();
 });
