@@ -14,7 +14,7 @@ postApp.use(cors({ origin: true }));
 
 postApp.get('/:id', async (req, res) => {
     const userId = req.params.id;
-    const snapshot = await db.collection('users').doc(id).collection('posts').get();
+    const snapshot = await db.collection('users').doc(userId).collection('posts').get();
 
     let posts = [];
     snapshot.forEach(doc => {
