@@ -69,6 +69,10 @@ postApp.put('/newUpdate/:id', async (req, res) => {
     const imageUrl = req.body.imageUrl;
 
     const data = {height:  height, imageUrl: imageUrl, note: note, time: time}
+
+    await db.collection('users').doc(userId).collection('plants').doc(plantId).update({
+        height: height
+    })
     
     await db.collection('users').doc(userId).collection('plants').doc(plantId).update(({
         updates: admin.firestore.FieldValue.arrayUnion({
