@@ -47,6 +47,7 @@ postApp.post('/new/:id', async (req, res) => {
         title: title,
         imageUrl: imageUrl,
         watering: watering,
+        height: height,
         temperature: temperature,
         sunlight: sunlight,
         note: note,
