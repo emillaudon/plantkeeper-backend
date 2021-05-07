@@ -51,6 +51,7 @@ postApp.post('/new/:id', async (req, res) => {
         temperature: temperature,
         sunlight: sunlight,
         note: note,
+        creationTime: time,
         updates:  [ {height:  height, imageUrl: imageUrl, note: note, time: time} ] 
     }
 
