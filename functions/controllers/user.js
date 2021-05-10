@@ -7,11 +7,28 @@ admin.initializeApp();
 const db = admin.firestore();
 
 const authMiddleWare = require('../authMiddleware');
+const { firebaseConfig } = require('firebase-functions');
 
 const userApp = express();
 userApp.use(authMiddleWare);
 
 userApp.use(cors({ origin: true }));
+
+userApp.post('/userName/:id', async (req, res) => {
+    const userId = req.params.id;
+    const userName = req.body.userName;
+
+    functions.logger.log("This is running");
+    var data = {
+        userName: "Hello"
+    }
+
+    await db.collection('users').doc(userId).set({
+        name: "User"
+    });
+
+    res.status(200).send();
+});
 
 userApp.get('/', async (req, res) => {
     const snapshot = await db.collection('users').get();
