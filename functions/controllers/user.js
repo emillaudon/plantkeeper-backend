@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 
 const admin = require('firebase-admin');
-admin.initializeApp();
 const db = admin.firestore();
 
 const authMiddleWare = require('../authMiddleware');
@@ -17,17 +16,26 @@ userApp.use(cors({ origin: true }));
 userApp.post('/userName/:id', async (req, res) => {
     const userId = req.params.id;
     const userName = req.body.userName;
-
-    functions.logger.log("This is running");
-    var data = {
-        userName: "Hello"
-    }
+    const email = req.body.email;
 
     await db.collection('users').doc(userId).set({
-        name: "User"
+        name: userName,
+        email: email,
+        friends: []
     });
 
-    res.status(200).send();
+    res.status(200).send("worked");
+});
+
+userApp.post('/addFriend/:id', async (req, res) => {
+    const userId = req.params.id;
+    const emailToAdd = req.body.email;
+
+    await db.collection('users').doc(userId).update({
+        friends: admin.firestore.FieldValue.arrayUnion(emailToAdd)
+    });
+
+    res.status(200).send("added friend");
 });
 
 userApp.get('/', async (req, res) => {

@@ -28,6 +28,71 @@ postApp.get('/:id', async (req, res) => {
     res.status(200).send(JSON.stringify(posts));
 });
 
+postApp.get('/friendPosts/:id', async (req, res) => {
+    const userId = req.params.id;
+    const doc = await db.collection('users').doc(userId).get();
+
+    var user = doc.data();
+    const friends = user.friends;
+
+    const friendsEmails = [];
+    friends.forEach(friendEmail => {
+        var mailToString = String(friendEmail);
+        friendsEmails.push(mailToString);
+        functions.logger.log("1111: ", friendEmail);
+    });
+
+    friendsEmails.push("testmail2@email.test");
+
+    functions.logger.log("1111: ", friendsEmails);
+
+    const usersToGetFrom = await db.collection('users').where("email", "in", friendsEmails).get();
+
+    let users = [];
+    usersToGetFrom.forEach(doc => {
+        users.push(doc);
+        functions.logger.log("2Hello from info. Here's an object:", doc.data());
+    });
+    
+    
+    let userDataList = [];
+    for (var i = 0; i < users.length; i++) {
+        let user = users[i];
+
+        functions.logger.log("2Hello from info. Here's an object:", user.data());
+        
+
+        let friendId = user.id;
+        functions.logger.log("3Hello from info. Here's an object:", friendId);
+        let userName = user.data().name;
+
+        const plantsDocs = await db.collection('users').doc(friendId).collection('plants').get();
+
+        
+        try {
+            let plants = [];
+                plantsDocs.forEach(doc => {
+                let id = doc.id;
+                let data = doc.data();
+
+                plants.push({ id, ...data });
+            });
+
+            var userData = {
+                userName: userName,
+                plants: plants
+            }
+        userDataList.push(userData);
+
+        } catch (e) {
+            functions.logger.log("Error: ", e);
+        }
+    }
+
+
+    res.status(200).send(JSON.stringify(userDataList));
+});
+
 postApp.post('/new/:id', async (req, res) => {
     const userId = req.params.id;
     const title = req.body.title;
