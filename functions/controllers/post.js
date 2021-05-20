@@ -133,6 +133,8 @@ postApp.put('/newUpdate/:id', async (req, res) => {
     const time = req.body.time;
     const note = req.body.note;
 
+    const daysOld =req.body.daysOld;
+
     const imageUrl = req.body.imageUrl;
 
     const data = {height:  height, imageUrl: imageUrl, note: note, time: time}
@@ -146,6 +148,7 @@ postApp.put('/newUpdate/:id', async (req, res) => {
             height: height,
             imageUrl: imageUrl,
             note: note,
+            daysOld: daysOld,
             time: time
         })
     }));
