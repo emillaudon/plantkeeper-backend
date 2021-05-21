@@ -140,6 +140,7 @@ postApp.put('/newUpdate/:id', async (req, res) => {
     const data = {height:  height, imageUrl: imageUrl, note: note, time: time}
 
     await db.collection('users').doc(userId).collection('plants').doc(plantId).update({
+        imageUrl: imageUrl,
         height: height
     })
     
