@@ -13,6 +13,8 @@ userApp.use(authMiddleWare);
 
 userApp.use(cors({ origin: true }));
 
+
+/////////creates a new user
 userApp.post('/userName/:id', async (req, res) => {
     const userId = req.params.id;
     const userName = req.body.userName;
@@ -27,6 +29,8 @@ userApp.post('/userName/:id', async (req, res) => {
     res.status(200).send("worked");
 });
 
+
+////////Add friend for user
 userApp.post('/addFriend/:id', async (req, res) => {
     const userId = req.params.id;
     const emailToAdd = req.body.email;
@@ -38,6 +42,7 @@ userApp.post('/addFriend/:id', async (req, res) => {
     res.status(200).send("added friend");
 });
 
+///////Gets all users
 userApp.get('/', async (req, res) => {
     const snapshot = await db.collection('users').get();
 
@@ -53,6 +58,8 @@ userApp.get('/', async (req, res) => {
 
 });
 
+
+//////Gets specific user
 userApp.get('/:id', async (req, res) => {
     const snapshot = await db.collection('users').doc(req.params.id).get();
 
@@ -62,6 +69,7 @@ userApp.get('/:id', async (req, res) => {
     res.status(200).send(JSON.stringify({ id: userId, ...userData }));
 });
 
+//////Adds a user
 userApp.post('/', async (req, res) => {
     const user = JSON.parse(req.body);
 
@@ -70,6 +78,8 @@ userApp.post('/', async (req, res) => {
     res.status(201).send();
 });
 
+
+//////Puts in data of user
 userApp.put('/:id', async (req, res) => {
     const body = JSON.parse(req.body);
 
@@ -78,6 +88,8 @@ userApp.put('/:id', async (req, res) => {
     res.status(200).send();
 });
 
+
+//////Deletes user using id
 userApp.delete('/:id', async (req, res) => {
     await db.collection('users').doc(req.params.id).delete();
 

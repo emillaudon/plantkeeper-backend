@@ -13,6 +13,8 @@ postApp.use(authMiddleWare);
 
 postApp.use(cors({ origin: true }));
 
+
+///////////////////Gets posts from specific user using user id
 postApp.get('/:id', async (req, res) => {
     const userId = req.params.id;
     const snapshot = await db.collection('users').doc(userId).collection('plants').get();
@@ -28,6 +30,7 @@ postApp.get('/:id', async (req, res) => {
     res.status(200).send(JSON.stringify(posts));
 });
 
+/////////////Gets posts from friends of user using user id
 postApp.get('/friendPosts/:id', async (req, res) => {
     const userId = req.params.id;
     const doc = await db.collection('users').doc(userId).get();
@@ -39,7 +42,6 @@ postApp.get('/friendPosts/:id', async (req, res) => {
     friends.forEach(friendEmail => {
         var mailToString = String(friendEmail);
         friendsEmails.push(mailToString);
-        functions.logger.log("1111: ", friendEmail);
     });
 
     const usersToGetFrom = await db.collection('users').where("email", "in", friendsEmails).get();
@@ -47,19 +49,13 @@ postApp.get('/friendPosts/:id', async (req, res) => {
     let users = [];
     usersToGetFrom.forEach(doc => {
         users.push(doc);
-        functions.logger.log("2Hello from info. Here's an object:", doc.data());
     });
-    
     
     let userDataList = [];
     for (var i = 0; i < users.length; i++) {
         let user = users[i];
-
-        functions.logger.log("2Hello from info. Here's an object:", user.data());
         
-
         let friendId = user.id;
-        functions.logger.log("3Hello from info. Here's an object:", friendId);
         let userName = user.data().name;
 
         const plantsDocs = await db.collection('users').doc(friendId).collection('plants').get();
@@ -89,6 +85,8 @@ postApp.get('/friendPosts/:id', async (req, res) => {
     res.status(200).send(JSON.stringify(userDataList));
 });
 
+
+////////////creates a new post(plant)
 postApp.post('/new/:id', async (req, res) => {
     const userId = req.params.id;
     const title = req.body.title;
@@ -121,6 +119,8 @@ postApp.post('/new/:id', async (req, res) => {
     res.status(201).send();
 });
 
+
+///////////creates a new update for a post(plant)
 postApp.put('/newUpdate/:id', async (req, res) => {
     const userId = req.params.id;
     const plantId = req.body.plantId;
@@ -151,6 +151,7 @@ postApp.put('/newUpdate/:id', async (req, res) => {
     }));
 
 });
+
 
 postApp.put('/:id', async (req, res) => {
     const id = req.params.id;
