@@ -42,10 +42,6 @@ postApp.get('/friendPosts/:id', async (req, res) => {
         functions.logger.log("1111: ", friendEmail);
     });
 
-    friendsEmails.push("testmail2@email.test");
-
-    functions.logger.log("1111: ", friendsEmails);
-
     const usersToGetFrom = await db.collection('users').where("email", "in", friendsEmails).get();
 
     let users = [];
