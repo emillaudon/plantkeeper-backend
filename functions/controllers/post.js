@@ -117,7 +117,7 @@ postApp.post('/new/:id', async (req, res) => {
         sunlight: sunlight,
         note: note,
         creationTime: time,
-        updates:  [ {height:  height, imageUrl: imageUrl, note: note, time: time} ] 
+        updates:  [ {height:  height, imageUrl: imageUrl, note: note, time: time, daysOld: 0} ] 
     }
 
     await db.collection('users').doc(userId).collection('plants').add(data);
